@@ -17,7 +17,14 @@ class parameter_storage(object):
         self.set_filenames()
 
     def set_default_params(self):
-        self.params['simulator'] = 'nest' # 'brian' #
+        self.params['simulator'] = 'hardware.brainscales' #'nest' # 'brian' #
+		# extra  setup parameters
+        self.params['extra_setup_params'] =  {
+				'ess_params': dict(hardwareSetup='small', perfectSynapseTrafo=True),
+				'useSystemSim':True,
+				'loglevel':2,
+				'logfile':"logfile.txt"
+				}
 
         # ###################
         # HEXGRID PARAMETERS

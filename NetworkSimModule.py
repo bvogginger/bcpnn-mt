@@ -22,6 +22,7 @@ params = ps.params
 exec("from pyNN.%s import *" % params['simulator'])
 import pyNN
 import pyNN.space as space
+from pyNN.random import NumpyRNG
 from pyNN.utility import Timer # for measuring the times to connect etc.
 print 'pyNN.version: ', pyNN.__version__
 try:
@@ -115,7 +116,7 @@ class NetworkModel(object):
         #     S E T U P       #
         # # # # # # # # # # # #
         (delay_min, delay_max) = self.params['delay_range']
-        setup(timestep=0.1, min_delay=delay_min, max_delay=delay_max, rng_seeds_seed=self.params['seed'])
+        setup(timestep=0.1, min_delay=delay_min, max_delay=delay_max, rng_seeds_seed=self.params['seed'], **self.params['extra_setup_params'])
         rng_v = NumpyRNG(seed = sim_cnt*3147 + self.params['seed'], parallel_safe=True) #if True, slower but does not depend on number of nodes
         self.rng_conn = NumpyRNG(seed = self.params['seed'], parallel_safe=True) #if True, slower but does not depend on number of nodes
 
@@ -462,7 +463,8 @@ class NetworkModel(object):
         prj = Projection(src_pop, tgt_pop, connector, target=syn_type)
         self.projections[conn_type].append(prj)
         if self.debug_connectivity:
-            prj.saveConnections(self.params['conn_list_%s_fn_base' % conn_type] + '.dat', gather=True)
+			pass
+            #prj.saveConnections(self.params['conn_list_%s_fn_base' % conn_type] + '.dat', gather=True)
 
 
     def connect_random(self, conn_type):
@@ -502,8 +504,8 @@ class NetworkModel(object):
         prj = Projection(src_pop, tgt_pop, connector, target=syn_type)
 
         conn_list_fn = self.params['conn_list_%s_fn_base' % conn_type] + '%d.dat' % (self.pc_id)
-        print 'Saving random %s connections to %s' % (conn_type, conn_list_fn)
-        prj.saveConnections(conn_list_fn, gather=False)
+        #print 'Saving random %s connections to %s' % (conn_type, conn_list_fn)
+        #prj.saveConnections(conn_list_fn, gather=False)
 
 
 
